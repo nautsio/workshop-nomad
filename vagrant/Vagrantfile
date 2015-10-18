@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+Vagrant.require_version ">= 1.6.0"
+
+$num_instances = 1
+$instance_name_prefix = "ddd"
+$share_home = false
+$vm_gui = false
+$vm_memory = 1024
+$vm_cpus = 1
+$shared_folders = {}
+$forwarded_ports = {}
+
+Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
+
+  config.vm.box = "dutchdockerday"
+  config.vm.box_url = "../packer/images/dutchdockerday.box"
+
+  config.vm.provider :virtualbox do |vb|
+    vb.check_guest_additions = false
+    vb.functional_vboxsf     = false
+  end
+
+  (1..$num_instances).each do |i|
+    config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
+      config.vm.hostname = vm_name
+
+      $forwarded_ports.each do |guest, host|
+        config.vm.network "forwarded_port", guest: guest, host: host, auto_correct: true
+      end
+
+      config.vm.provider :virtualbox do |vb|
+        vb.gui = $vm_gui
+        vb.memory = $vm_memory
+        vb.cpus = $vm_cpus
+      end
+
+      ip = "172.17.8.#{i+100}"
+      config.vm.network :private_network, ip: ip
+    end
+  end
+end

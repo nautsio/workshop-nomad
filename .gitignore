@@ -1,2 +1,7 @@
+# Packer
 packer/images
+packer/packer_cache
+packer/output-virtualbox-iso
+
+# Vagrant
 vagrant/.vagrant
