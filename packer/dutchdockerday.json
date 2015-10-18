@@ -1,0 +1,65 @@
+{
+  "variables": {
+    "ssh_name": "vagrant",
+    "ssh_pass": "vagrant",
+    "memory": "1024",
+    "cpus": "1"
+  },
+  "builders": [
+    {
+      "headless": true,
+      "type": "virtualbox-iso",
+      "virtualbox_version_file": ".vbox_version",
+      "guest_additions_mode": "disable",
+      "guest_os_type": "Ubuntu_64",
+
+      "disk_size": 5000,
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
+        ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
+      ],
+
+      "iso_url": "http://nl3.releases.ubuntu.com/releases/15.04/ubuntu-15.04-server-amd64.iso",
+      "iso_checksum": "d10248965c2c749df6bcce9f2f90f16a2e75e843",
+      "iso_checksum_type": "sha1",
+
+      "ssh_username": "{{user `ssh_name`}}",
+      "ssh_password": "{{user `ssh_pass`}}",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "10000s",
+
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic ",
+        "preseed/url=http://{{.HTTPIP}}:{{.HTTPPort}}/preseed.cfg ",
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+        "hostname={{.Name}} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+        "initrd=/install/initrd.gz -- <enter>"
+      ],
+      "boot_wait": "8s",
+      "http_directory": "http",
+      "shutdown_command": "echo 'vagrant' | sudo -S /sbin/halt -h -p"
+    }
+  ],
+
+  "post-processors": [
+    {
+      "output": "images/dutchdockerday.box",
+      "type": "vagrant"
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/vagrant.sh",
+        "scripts/packages.sh"
+      ]
+    }
+  ]
+}
