@@ -2,7 +2,7 @@
 
 # Install tools
 apt-get update
-apt-get install -y curl unzip build-essential
+apt-get install -y curl unzip collectd
 
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
@@ -19,13 +19,4 @@ mkdir /etc/nomad
 chmod 755 /etc/nomad
 
 mkdir /var/local/nomad
-chmod 777 /var/local/nomad
-
-# Install Collectd
-cd /tmp/
-wget https://github.com/collectd/collectd/archive/collectd-5.5.0.zip
-unzip collectd-5.5.0.zip
-cd collectd-5.5.0
-
-./configure
-make all install
+chmod 755 /var/local/nomad
