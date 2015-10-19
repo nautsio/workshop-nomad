@@ -5,11 +5,9 @@ Vagrant.require_version ">= 1.6.0"
 
 $num_instances = 1
 $instance_name_prefix = "ddd"
-$share_home = false
 $vm_gui = false
 $vm_memory = 1024
 $vm_cpus = 1
-$shared_folders = {}
 $forwarded_ports = {}
 
 Vagrant.configure("2") do |config|
