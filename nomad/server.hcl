@@ -1,10 +1,10 @@
-server: {
-  enabled: true
+server {
+  enabled = true
 
   # Server
-  bootstrap_expect: 3
+  bootstrap_expect = 3
 
   # Schedulers
-  num_schedulers: 1
-  enabled_schedulers: ["service", "batch"]
+  num_schedulers = 1
+  enabled_schedulers = ["service", "batch"]
 }
