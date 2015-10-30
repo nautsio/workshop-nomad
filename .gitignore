@@ -5,3 +5,6 @@ packer/output-virtualbox-iso
 
 # Vagrant
 vagrant/.vagrant
+
+# OSX
+.DS_Store

@@ -5,7 +5,7 @@ set -e
 
 # Install tools
 apt-get update
-apt-get install -y curl unzip collectd
+apt-get install -y curl unzip collectd jq
 
 # Install Docker
 curl -sSL https://get.docker.com/ | sh
