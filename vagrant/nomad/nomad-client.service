@@ -1,0 +1,6 @@
+[Unit]
+Description=Nomad Client
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/nomad agent -config=/etc/nomad/node.hcl -config=/etc/nomad/general.hcl -config=/etc/nomad/client.hcl >/dev/null &
