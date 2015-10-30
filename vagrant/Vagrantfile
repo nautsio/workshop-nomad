@@ -41,17 +41,16 @@ Vagrant.configure("2") do |config|
 
       # Copy the Nomad config files.
       config.vm.provision "shell",
-        inline: "cp -R /vagrant/nomad/*.hcl /etc/nomad/"
+        inline: "cp -R /vagrant/nomad/* /etc/nomad/"
 
       # Copy the Nomad init file.
       config.vm.provision "shell",
-        inline: "sudo systemctl enable /etc/nomad.d/nomad-server.service && sudo systemctl enable /etc/nomad.d/nomad-client.service"
-
+        inline: "sudo systemctl enable /etc/nomad/init/nomad-server.service && sudo systemctl enable /etc/nomad/init/nomad-client.service"
 
       # Set the Nomad node name and ip.
       # Make setting the name nicer...someday...
       nodeip = "\"#{ip}\""
-      nodename = "\"#{$instance_name_prefix}-#{i}\""
+      nodename = "%s-%02d" % [$instance_name_prefix, i]
       config.vm.provision "shell" do |s|
         s.inline = "echo \"name=$1\nbind_addr=$2\" > /etc/nomad/node.hcl"
         s.args = [nodename, nodeip]
@@ -63,7 +62,8 @@ Vagrant.configure("2") do |config|
       # Add the other nodes to hosts
       # Make setting the name nicer...someday...
       (1.. $num_instances).each do |host|
-        config.vm.provision "shell", inline: "echo \"172.17.8.#{host+100}    #{$instance_name_prefix}-#{host}\" >> /etc/hosts"
+        hostname = "%s-%02d" % [$instance_name_prefix, host]
+        config.vm.provision "shell", inline: "echo \"172.17.8.#{host+100}    #{hostname}\" >> /etc/hosts"
       end
     end
   end

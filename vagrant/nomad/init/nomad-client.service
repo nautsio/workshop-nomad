@@ -1,0 +1,9 @@
+[Unit]
+Description=Nomad Client
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/nomad agent -config=/etc/nomad/conf/node.hcl -config=/etc/nomad/conf/general.hcl -config=/etc/nomad/conf/client.hcl >/dev/null &
+
+[Install]
+WantedBy=multi-user.target
