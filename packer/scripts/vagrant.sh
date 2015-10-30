@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Quit on errors
+set -e
+
 #Install vagrant ssh key
 mkdir /home/vagrant/.ssh
 wget --no-check-certificate -O authorized_keys 'https://github.com/mitchellh/vagrant/raw/master/keys/vagrant.pub'
