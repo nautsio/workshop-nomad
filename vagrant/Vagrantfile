@@ -19,7 +19,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.check_guest_additions = false
-  end
+    vb.functional_vboxsf     = false
+   end
 
   (1..$num_instances).each do |i|
     config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
@@ -37,17 +38,6 @@ Vagrant.configure("2") do |config|
 
       ip = "172.17.8.#{i+100}"
       config.vm.network :private_network, ip: ip
-
-      # Copy the Nomad config files.
-      config.vm.provision "shell", inline: "cp -R /vagrant/nomad/*.hcl /etc/nomad/"
-
-      # Set the Nomad node name and ip.
-      nodeip = "\"#{ip}\""
-      nodename = "\"ddd-0#{i}\""
-      config.vm.provision "shell" do |s|
-        s.inline = "echo \"name=$1\nbind_addr=$2\" > /etc/nomad/node.hcl"
-        s.args = [nodename, nodeip]
-      end
     end
   end
 end
