@@ -3,7 +3,7 @@
 
 Vagrant.require_version ">= 1.6.0"
 
-$num_instances = 1
+$num_instances = 3
 $instance_name_prefix = "ddd"
 $vm_gui = false
 $vm_memory = 1024
@@ -37,6 +37,17 @@ Vagrant.configure("2") do |config|
 
       ip = "172.17.8.#{i+100}"
       config.vm.network :private_network, ip: ip
+
+      # Copy the Nomad config files.
+      config.vm.provision "shell", inline: "cp -R /vagrant/nomad/*.hcl /etc/nomad/"
+
+      # Set the Nomad node name and ip.
+      nodeip = "\"#{ip}\""
+      nodename = "\"ddd-0#{i}\""
+      config.vm.provision "shell" do |s|
+        s.inline = "echo \"name=$1\nbind_addr=$2\" > /etc/nomad/node.hcl"
+        s.args = [nodename, nodeip]
+      end
     end
   end
 end
