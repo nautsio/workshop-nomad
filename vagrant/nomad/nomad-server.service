@@ -4,3 +4,6 @@ Description=Nomad Server
 [Service]
 TimeoutStartSec=0
 ExecStart=/usr/bin/nomad agent -config=/etc/nomad
+
+[Install]
+WantedBy=multi-user.target

@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "dutchdockerday"
   config.vm.box_url = "../packer/images/dutchdockerday.box"
-#  config.vm.box_check_update = false
+  config.vm.box_check_update = false
 
   config.vm.provider :virtualbox do |vb|
     vb.check_guest_additions = false
@@ -40,28 +40,16 @@ Vagrant.configure("2") do |config|
       ip = "172.17.8.#{i+100}"
       config.vm.network :private_network, ip: ip
 
-      # Add the nodes to hosts.
-      config.vm.provision "shell",inline: "sudo cp /vagrant/etc/hosts /etc/hosts"
+      # Provision the machine.
+      config.vm.provision "shell", path: "config/provision.sh", :args => "%s %d" % [$instance_name_prefix, i]
 
-      # Copy the Nomad init files.
-      config.vm.provision "shell", inline: "sudo cp /vagrant/nomad/nomad-client.service /etc/nomad/"
-      config.vm.provision "shell", inline: "sudo cp /vagrant/nomad/nomad-server.service /etc/nomad/"
-      config.vm.provision "shell", inline: "sudo systemctl daemon-reload"
-
-      # Set the Nomad configs.
-      config.vm.provision "shell", inline: "sudo cp /vagrant/nomad/server.hcl /etc/nomad/"
-      config.vm.provision "shell", inline: "sudo cp /vagrant/nomad/general.hcl /etc/nomad/"
-
-      # Temporarily move the client config to home directory
-      config.vm.provision "shell", inline: "sudo cp /vagrant/nomad/client.hcl /home/vagrant/"
-
-      # Generate the Nomad node config.
-      nodeip = "\"#{ip}\""
-      nodename = "%s-%02d" % [$instance_name_prefix, i]
-      config.vm.provision "shell" do |s|
-        s.inline = "echo \"name=$1\nbind_addr=$2\" > /etc/nomad/node.hcl"
-        s.args = [nodename, nodeip]
-      end
+      # # Generate the Nomad node config.
+      # nodeip = "\"#{ip}\""
+      # nodename = "%s-%02d" % [$instance_name_prefix, i]
+      # config.vm.provision "shell" do |s|
+      #   s.inline = "echo \"name=$1\nbind_addr=$2\" > /etc/nomad/node.hcl"
+      #   s.args = [nodename, nodeip]
+      # end
     end
   end
 end
