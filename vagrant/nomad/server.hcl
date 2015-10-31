@@ -1,10 +1,8 @@
 server {
-  enabled = true
-
-  # Server
+  # Startup.
   bootstrap_expect = 3
 
-  # Schedulers
+  # Scheduler configuration.
   num_schedulers = 1
   enabled_schedulers = ["service", "batch"]
 }

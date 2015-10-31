@@ -10,7 +10,7 @@ log_level = "INFO"
 
 # Metrics
 telemetry {
-  statsd_address = "localhost:8125"
+  # statsd_address = "localhost:8125"
 }
 
 # Node

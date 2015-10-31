@@ -3,7 +3,7 @@ Description=Nomad Client
 
 [Service]
 TimeoutStartSec=0
-ExecStart=/usr/bin/nomad agent -config=/etc/nomad
+ExecStart=/usr/bin/nomad agent -client -config=/etc/nomad
 
 [Install]
 WantedBy=multi-user.target

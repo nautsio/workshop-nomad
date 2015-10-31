@@ -3,14 +3,12 @@ MACHINE_PREFIX=$1
 MACHINE_ID=$2
 NUM_INSTANCES=$3
 
-function copyNomadConfigs() {
-  sudo cp /vagrant/nomad/nomad-client.service \
-    /vagrant/nomad/nomad-server.service \
-    /vagrant/nomad/server.hcl \
-    /vagrant/nomad/client.hcl \
-    /vagrant/nomad/general.hcl \
-    /etc/nomad/
-}
+sudo cp /vagrant/nomad/nomad-client.service \
+  /vagrant/nomad/nomad-server.service \
+  /vagrant/nomad/server.hcl \
+  /vagrant/nomad/client.hcl \
+  /vagrant/nomad/general.hcl \
+  /etc/nomad/
 
 function writeNomadNodeConfig() {
   local NAME=$(printf "$MACHINE_PREFIX-%02d" $MACHINE_ID)
@@ -35,5 +33,5 @@ function writeHostsFile() {
 }
 
 writeHostsFile
-copyNomadConfigs
 writeNomadNodeConfig
+sudo systemctl daemon-reload
