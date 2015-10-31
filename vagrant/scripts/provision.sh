@@ -3,17 +3,14 @@ MACHINE_PREFIX=$1
 MACHINE_ID=$2
 NUM_INSTANCES=$3
 
-sudo cp /vagrant/nomad/nomad-client.service \
-  /vagrant/nomad/nomad-server.service \
-  /vagrant/nomad/server.hcl \
-  /vagrant/nomad/client.hcl \
-  /vagrant/nomad/general.hcl \
-  /etc/nomad/
+sudo install -o root -g root -m 644 /vagrant/files/etc/systemd/system/nomad.service /etc/systemd/system/nomad.service
+sudo install -o root -g root -m 755 -d /etc/nomad.d
+sudo install -o root -g root -m 644 /vagrant/files/etc/nomad.d/* /etc/nomad.d
 
 function writeNomadNodeConfig() {
   local NAME=$(printf "$MACHINE_PREFIX-%02d" $MACHINE_ID)
   local BINDADDR="172.17.8.$((100+$MACHINE_ID))"
-  printf 'name="%s"\nbind_addr="%s"' $NAME $BINDADDR > /etc/nomad/node.hcl
+  printf 'name="%s"\nbind_addr="%s"' $NAME $BINDADDR > /etc/nomad.d/node.hcl
 }
 
 function generateNodeHostsLine() {

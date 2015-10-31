@@ -1,4 +1,6 @@
 server {
+  enabled = true
+
   # Startup.
   bootstrap_expect = 3
 
