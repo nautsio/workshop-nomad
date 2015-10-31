@@ -1,9 +1,0 @@
-[Unit]
-Description=Nomad Server
-
-[Service]
-TimeoutStartSec=0
-ExecStart=/usr/bin/nomad agent -bootstrap-expect=3 -server -config=/etc/nomad
-
-[Install]
-WantedBy=multi-user.target
