@@ -8,6 +8,7 @@
 * Single binary
 * Multi-Datacenter
 * Very new. version 0.1.3
+XXX
 
 !SUB
 # Architecture overview
@@ -21,9 +22,11 @@
   - server
   - client
   - task_driver
+XXX
 
 !SLIDE
 # Workshop goal
+XXX
 
 !SUB
 # Workshop Setup
@@ -31,7 +34,7 @@ Prerequisites:
 * Virtualbox
 * Vagrant
 * Enough memory
-* Thisp project repo
+* This project repo
 
 !SUB
 ## Environment
@@ -129,7 +132,7 @@ Available commands are:
 # Agent Dev Mode
 
 * starts a single node in dev mode.
-* acts both as client and server 
+* acts both as client and server
 * NOT for production we will perform a proper server installation later
 
 ```
@@ -170,12 +173,13 @@ vagrant@ddd-01:~$ sudo nomad agent -dev
 
 
 ```
-# nomad agent-info
+nomad agent-info
 nomad status
 nomad node-status
 nomad alloc-status
 nomad server-members
 ```
+XXX
 
 !SUB
 # Start your first job
@@ -200,26 +204,74 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 369d722e48f2        redis:latest        "/entrypoint.sh redis"   2 minutes ago       Up 2 minutes        10.0.2.15:37912->6379/tcp   reverent_bose
 ```
 
-
+!SLIDE
 # Running in Cluster
+For a reliable cluster we need 3 servers (or 5).
 
+Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`.
+Configuration uses HCL format, see XX for details.
 
+Systemd unit file is also installed, so starting as a service is simple
 
+```
+vagrant@ddd-01:~$ sudo service nomad start
+vagrant@ddd-01:~$ sudo service nomad status
+● nomad.service - Nomad Agent
+   Loaded: loaded (/etc/systemd/system/nomad.service; disabled)
+   Active: active (running) since Thu 2015-11-05 12:33:31 UTC; 3s ago
+ Main PID: 2045 (nomad)
+   CGroup: /system.slice/nomad.service
+           └─2045 /usr/bin/nomad agent -config=/etc/nomad.d
 
-
-from different shell
+Nov 05 12:33:31 ddd-01 nomad[2045]: raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
+Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
+Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+Nov 05 12:33:31 ddd-01 nomad[2045]: serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
+Nov 05 12:33:31 ddd-01 nomad[2045]: nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
+Nov 05 12:33:31 ddd-01 nomad[2045]: serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+Nov 05 12:33:32 ddd-01 nomad[2045]: raft: EnableSingleNode disabled, and no known peers. Aborting election.
+Nov 05 12:33:32 ddd-01 nomad[2045]: 2015/11/05 12:33:32 [WARN] raft: EnableSingleNode disabled, and no known peers. Aborting election.
+```
 
 # Job creation
+## Job Types:
+  * Service
+  * Batch
+  * System(?)
+## Task drivers
+  * Docker
+  * exec / raw_exec
+    *
+  * there are others ...
 
-# Node selection on metadata
-# Node selection on node class
+# Constraints
+## Node selection on metadata
+## Node selection on node class
+
 # Job config via options
+## ENV setting for docker container, e.g. output message of paas-monitor
+## port mappings
 
-# Job scheduling
+# Updating jobs
+## Scaling up & down
+## Rolling updates
 
-* pack vs spread
+# Node Management
+## Node availability
+## Adding nodes.
+## draining nodes. What happens with jobs?
+## removing nodes.
+## Resource usage / availability
 
-# Scaling jobs
-# Taskgroups
-# Service jobs
-# Batch jobs
+# Failures
+# Kill job / container
+# Kill Nomad client
+# Kill VM
+# Kill Server
+## Leadership election. WHat happens if #servers < bootstrap
+## Restart after all Nomad servers down
+# Resource exhaustion
+## How detected, resolved...
+## Are resource limits hard? How enforced? Via Docker resource limits? Via cgroups in 'exec' driver?
