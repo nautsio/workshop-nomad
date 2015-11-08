@@ -1,6 +1,8 @@
 <img src="http://cdn.nauts.io/img/cargonaut.svg" class="header">
-# Presentation title
+# Workshop Nomad
 
-<br>[nauts.io/presentation](http://nauts.io/presentation)
+<br>[nauts.io/nomad-workshop](http://nauts.io/nomad-workshop)
 
-Naut #1 - [naut1@nauts.io](mailto:naut1@nauts.io)
+Erik Veld - [eveld@xebia.com](mailto:eveld@xebia.com)
+
+Bastiaan Bakker - [bbakker@xebia.com](bbakker@xebia.com)
