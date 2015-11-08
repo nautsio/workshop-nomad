@@ -1,9 +1,0 @@
-[Unit]
-Description=Nomad Agent
-
-[Service]
-TimeoutStartSec=0
-ExecStart=/usr/bin/nomad agent -config=/etc/nomad.d
-
-[Install]
-WantedBy=multi-user.target

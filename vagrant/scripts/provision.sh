@@ -3,10 +3,6 @@ MACHINE_PREFIX=$1
 MACHINE_ID=$2
 NUM_INSTANCES=$3
 
-sudo install -o root -g root -m 644 /vagrant/files/etc/systemd/system/nomad.service /etc/systemd/system/nomad.service
-sudo install -o root -g root -m 755 -d /etc/nomad.d
-sudo install -o root -g root -m 644 /vagrant/files/etc/nomad.d/* /etc/nomad.d
-
 function writeNomadNodeConfig() {
   local NAME=$(printf "$MACHINE_PREFIX-%02d" $MACHINE_ID)
   local BINDADDR="172.17.8.$((100+$MACHINE_ID))"
@@ -14,10 +10,18 @@ function writeNomadNodeConfig() {
 }
 
 function generateNodeHostsLine() {
-  local HOST=$(printf "$MACHINE_PREFIX-%02d" $1)
-  local IP="172.17.8.$((100+$1))"
-
+  local HOST=$(printf "$MACHINE_PREFIX-%02d" $MACHINE_ID)
+  local IP="172.17.8.$((100+$MACHINE_ID))"
   echo "$IP   $HOST"
+}
+
+function writeConsulNodeCOnfig() {
+  local BINDADDR="172.17.8.$((100+$MACHINE_ID))"
+  if [ $MACHINE_ID == 1 ]; then
+    printf '{"bootstrap": true, "bind_addr": "%s"}' $BINDADDR | jq . > /etc/consul.d/node.json
+  else
+    printf '{"start_join": ["172.17.8.101"], "bind_addr": "%s"}' $BINDADDR | jq . > /etc/consul.d/node.json
+  fi
 }
 
 function writeHostsFile() {
@@ -31,4 +35,6 @@ function writeHostsFile() {
 
 writeHostsFile
 writeNomadNodeConfig
-sudo systemctl daemon-reload
+writeConsulNodeCOnfig
+
+sudo service consul restart

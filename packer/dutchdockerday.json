@@ -25,7 +25,7 @@
         "<enter><wait>"
       ],
       "boot_wait": "10s",
-      "headless": true,
+      "headless": false,
       "disk_size": 5000,
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Debian_64",
@@ -56,11 +56,20 @@
 
   "provisioners": [
     {
+      "type": "file",
+      "source": "files/",
+      "destination": "/tmp"
+    },
+    {
       "type": "shell",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "scripts": [
         "scripts/vagrant.sh",
-        "scripts/packages.sh"
+        "scripts/packages.sh",
+        "scripts/nomad.sh",
+        "scripts/consul.sh",
+        "scripts/docker.sh"
+
       ]
     }
   ]
