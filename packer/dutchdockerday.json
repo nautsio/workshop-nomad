@@ -69,7 +69,6 @@
         "scripts/nomad.sh",
         "scripts/consul.sh",
         "scripts/docker.sh"
-
       ]
     }
   ]
