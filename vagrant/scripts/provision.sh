@@ -18,9 +18,9 @@ function generateNodeHostsLine() {
 function writeConsulNodeCOnfig() {
   local BINDADDR="172.17.8.$((100+$MACHINE_ID))"
   if [ $MACHINE_ID == 1 ]; then
-    printf '{"bootstrap": true, "bind_addr": "%s"}' $BINDADDR | jq . > /etc/consul.d/node.json
+    printf '{"bootstrap": true, "bind_addr": "%s", "client_addr": "%s"}' $BINDADDR $BINDADDR | jq . > /etc/consul.d/node.json
   else
-    printf '{"start_join": ["172.17.8.101"], "bind_addr": "%s"}' $BINDADDR | jq . > /etc/consul.d/node.json
+    printf '{"start_join": ["172.17.8.101"], "bind_addr": "%s", "client_addr": "%s"}' $BINDADDR $BINDADDR | jq . > /etc/consul.d/node.json
   fi
 }
 
