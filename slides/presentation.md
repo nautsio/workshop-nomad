@@ -23,25 +23,20 @@ It abstracts away the machines and location of the applications.
 
 !SLIDE
 # Architecture
-Multi DC, clients talk to local server, one server is leader
+Clients talk to local server, one server is leader
 ![client-server](images/nomad-architecture-region-a5b20915.png)
-
 https://nomadproject.io/docs/internals/architecture.html
 
 !SLIDE
 # Architecture
 ![data model](images/nomad-data-model-39de5cfc.png)
-
 https://nomadproject.io/docs/internals/scheduling.html
 
 !SUB
 # Terminology
 * Job, Task & Taskgroup
 * Allocation & Evaluation
-* Node
-* Agent
-* Server
-* Client
+* Node, Agent, Server & Client
 * Taskdriver
 
 !SLIDE
@@ -77,14 +72,9 @@ Bringing machine 'ddd-01' up with 'virtualbox' provider...
 Bringing machine 'ddd-02' up with 'virtualbox' provider...
 Bringing machine 'ddd-03' up with 'virtualbox' provider...
 ==> ddd-01: Importing base box 'dutchdockerday'...
-==> ddd-01: Matching MAC address for NAT networking...
 ==> ddd-01: Setting the name of the VM: vagrant_ddd-01_1446721417631_30468
-==> ddd-01: Clearing any previously set network interfaces...
 ==> ddd-01: Preparing network interfaces based on configuration...
-    ddd-01: Adapter 1: nat
-    ddd-01: Adapter 2: hostonly
 ==> ddd-01: Forwarding ports...
-    ddd-01: 22 => 2222 (adapter 1)
 ==> ddd-01: Running 'pre-boot' VM customizations...
 ==> ddd-01: Booting VM...
 ==> ddd-01: Waiting for machine to boot. This may take a few minutes...
@@ -185,7 +175,7 @@ vagrant@ddd-01:~$ sudo nomad agent -dev
 * What is the status of the Nomad agent?
 * Which server members are present?
 * Which clients are present?
-* which resources (CPU, memory, etc.) are available? *
+* which resources (CPU, memory, etc.) are available? ...
 * which other information is available?
 
 https://nomadproject.io/docs/agent/
@@ -199,12 +189,11 @@ $ nomad server-members
 $ nomad node-status
 ```
 
-Resources cannot be queried through the CLI.
-
+Resources can't be queried with the CLI.   
 Use HTTP API instead:
 
 ```
-$ curl http://127.0.0.1:4646/v1/node/21eac115-f6ce-9357-5c4e-9886cf058e4d | jq .
+$ curl http://127.0.0.1:4646/v1/node/21eac115-f6ce-9357-9886cf058e4d | jq .
 ```
 
 https://nomadproject.io/docs/http/nodes.html
@@ -234,25 +223,17 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 
 !SUB
 # Exercises
-
 * See what you can find out about the Node, Evaluation and Allocation
-* try the HTTP API too!
-* What happens if you kill the redis server with
+* Try the HTTP API too!
+* What happens if you kill the redis server with:
 
-```sudo killall redis-server```
-
-
-
-
+```
+sudo killall redis-server
+```
 
 !SLIDE
 # Running in Cluster
-For a reliable cluster we need 3 servers (or 5).
-
-Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`.
-Configuration uses HCL format, see XX for details.
-
-Systemd unit file is also installed, so starting as a service is simple
+For a reliable cluster we need 3 servers (or 5). The Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`.
 
 ```
 vagrant@ddd-01:~$ sudo service nomad start
@@ -276,45 +257,52 @@ Nov 05 12:33:32 ddd-01 nomad[2045]: raft: EnableSingleNode disabled, and no know
 Nov 05 12:33:32 ddd-01 nomad[2045]: 2015/11/05 12:33:32 [WARN] raft: EnableSingleNode disabled, and no known peers. Aborting election.
 ```
 
+!SLIDE
 # Job creation
-## Job Types:
+Nomad supports several job types:
   * Service
   * Batch
   * System(?)
-## Task drivers
+
+!SUB
+# Task drivers
+Docker can use several task drivers:
   * Docker
   * exec / raw_exec
-    *
   * there are others ...
 
+!SLIDE
 # Constraints
-## Node selection on metadata
-## Node selection on node class
+* Try to place your job based on metadata
+* Try to place your job based on attribute
 
+!SUB
 # Job config via options
 ## ENV setting for docker container, e.g. output message of paas-monitor
 ## port mappings
 
+!SUB
 # Updating jobs
-## Scaling up & down
-## Rolling updates
+* What happens if we change the version?
+* What happens if we scale up/down?
+* What happens if we add a constraint?
 
+!SLIDE
 # Node Management
-## Node availability
-## Adding nodes.
-## draining nodes. What happens with jobs?
-## removing nodes.
-## Resource usage / availability
+* What happens if we add nodes?
+* When we drain a node. What happens with jobs?
+* What happens if we remove a node?
 
+!SLIDE
 # Failures
-# Kill job / container
-# Kill Nomad client
-# Kill VM
-# Kill Server
-## Leadership election. WHat happens if #servers < bootstrap
-## Restart after all Nomad servers down
-# Resource exhaustion
-## How detected, resolved...
-## Are resource limits hard? How enforced? Via Docker resource limits? Via cgroups in 'exec' driver?
+* What happens if we kill job?
+* What happens if we kill a Nomad client?
+* What happens if we kill a Nomad server?
+* What happens if we kill a VM?
+* We restart after all Nomad servers went down?
+* We exhaust the resources on a node?
+Are resource limits hard? How are they enforced? Via Docker resource limits? Via cgroups in 'exec' driver?
 
-test
+!SLIDE
+# What will the future bring?
+Nomad is being actively developed and new features are being merged constantly.
