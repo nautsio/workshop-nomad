@@ -10,4 +10,6 @@ sudo usermod -aG docker vagrant
 sudo install -o root -g root -m 755 -d /etc/systemd/system/docker.service.d
 sudo install -o root -g root -m 644 /tmp/etc/systemd/system/docker.service.d/cluster.conf /etc/systemd/system/docker.service.d/cluster.conf
 
+sudo service docker restart
+
 # Pull all images we want to pre-load for the workshop.
