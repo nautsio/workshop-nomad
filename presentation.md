@@ -262,13 +262,14 @@ Nov 05 12:33:32 ddd-01 nomad[2045]: 2015/11/05 12:33:32 [WARN] raft: EnableSingl
 Nomad supports several job types:
   * Service
   * Batch
-  * System(?)
+  * System(in a future release)
 
 !SUB
 # Task drivers
 Docker can use several task drivers:
   * Docker
   * exec / raw_exec
+  * java
   * there are others ...
 
 !SLIDE
