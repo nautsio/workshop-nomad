@@ -23,7 +23,16 @@ It abstracts away the machines and location of the applications.
 
 !SLIDE
 # Architecture
-Some image of architecture?
+Multi DC, clients talk to local server, one server is leader
+![client-server](images/nomad-architecture-region-a5b20915.png)
+
+https://nomadproject.io/docs/internals/architecture.html
+
+!SLIDE
+# Architecture
+![data model](images/nomad-data-model-39de5cfc.png)
+
+https://nomadproject.io/docs/internals/scheduling.html
 
 !SUB
 # Terminology
@@ -138,6 +147,8 @@ Available commands are:
     version               Prints the Nomad version
 ```
 
+https://nomadproject.io/docs/commands/index.html
+
 !SUB
 # Agent Dev Mode
 In dev mode a single node is started that acts as both client and server.
@@ -169,18 +180,38 @@ vagrant@ddd-01:~$ sudo nomad agent -dev
 ```
 
 !SUB
-```
-nomad agent-info
-nomad status
-nomad node-status
-nomad alloc-status
-nomad server-members
-```
-XXX
+# Exercises
+
+* What is the status of the Nomad agent?
+* Which server members are present?
+* Which clients are present?
+* which resources (CPU, memory, etc.) are available? *
+* which other information is available?
+
+https://nomadproject.io/docs/agent/
 
 !SUB
-# Start your first job
-Create an example job
+# Answers
+
+```
+$ nomad agent-info
+$ nomad server-members
+$ nomad node-status
+```
+
+Resources cannot be queried through the CLI.
+
+Use HTTP API instead:
+
+```
+$ curl http://127.0.0.1:4646/v1/node/21eac115-f6ce-9357-5c4e-9886cf058e4d | jq .
+```
+
+https://nomadproject.io/docs/http/nodes.html
+
+!SLIDE
+# Your first job
+Let Nomad create an example job for you
 
 ```
 $ nomad init
@@ -200,6 +231,19 @@ vagrant@ddd-01:~$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                       NAMES
 369d722e48f2        redis:latest        "/entrypoint.sh redis"   2 minutes ago       Up 2 minutes        10.0.2.15:37912->6379/tcp   reverent_bose
 ```
+
+!SUB
+# Exercises
+
+* See what you can find out about the Node, Evaluation and Allocation
+* try the HTTP API too!
+* What happens if you kill the redis server with
+
+```sudo killall redis-server```
+
+
+
+
 
 !SLIDE
 # Running in Cluster
