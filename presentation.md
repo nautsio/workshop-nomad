@@ -150,23 +150,21 @@ vagrant@ddd-01:~$ sudo nomad agent -dev
 ==> Starting Nomad agent...
 2015/11/05 11:12:22 [ERR] fingerprint.env_aws: Error querying AWS Metadata URL, skipping
 ==> Nomad agent configuration:
-
-                 Atlas: <disabled>
-                Client: true
-             Log Level: DEBUG
-                Region: global (DC: dc1)
-                Server: true
+Atlas: <disabled>
+Client: true
+Log Level: DEBUG
+Region: global (DC: dc1)
+Server: true
 
 ==> Nomad agent started! Log data will stream in below:
-
-    2015/11/05 11:12:20 [INFO] serf: EventMemberJoin: ddd-01.global 127.0.0.1
-    2015/11/05 11:12:20 [INFO] nomad: starting 1 scheduling worker(s) for [service batch _core]
-    2015/11/05 11:12:20 [INFO] client: using alloc directory /tmp/NomadClient785630726
-    2015/11/05 11:12:20 [INFO] raft: Node at 127.0.0.1:4647 [Follower] entering Follower state
-    2015/11/05 11:12:20 [INFO] nomad: adding server ddd-01.global (Addr: 127.0.0.1:4647) (DC: dc1)
-    2015/11/05 11:12:22 [INFO] raft: Disabling EnableSingleNode (bootstrap)
-    2015/11/05 11:12:22 [DEBUG] raft: Node 127.0.0.1:4647 updated peer set (2): [127.0.0.1:4647]
-    2015/11/05 11:12:22 [INFO] nomad: cluster leadership acquired
+11:12:20 [INFO] serf: EventMemberJoin: ddd-01.global 127.0.0.1
+11:12:20 [INFO] nomad: starting 1 scheduling worker(s) for [service batch _core]
+11:12:20 [INFO] client: using alloc directory /tmp/NomadClient785630726
+11:12:20 [INFO] raft: Node at 127.0.0.1:4647 [Follower] entering Follower state
+11:12:20 [INFO] nomad: adding server ddd-01.global (Addr: 127.0.0.1:4647) (DC: dc1)
+11:12:22 [INFO] raft: Disabling EnableSingleNode (bootstrap)
+11:12:22 [DEBUG] raft: Node 127.0.0.1:4647 updated peer set (2): [127.0.0.1:4647]
+11:12:22 [INFO] nomad: cluster leadership acquired
 ```
 
 !SUB
@@ -212,13 +210,13 @@ Starting the job:
 ```
 vagrant@ddd-01:~$ nomad run example.nomad
 ==> Monitoring evaluation "6776c250-1a86-a6bf-050b-53d36dde4817"
-    Evaluation triggered by job "example"
-    Allocation "fb300253-e535-bb23-a3a7-6c16c09aab0c" created: node "9d4d05d1-468b-db71-fd8a-fb0bfc0cce1f", group "cache"
-    Evaluation status changed: "pending" -> "complete"
+Evaluation triggered by job "example"
+Allocation "fb300253-e535-bb23-a3a7-6c16c09aab0c" created: node "9d4d05d1-468b-db71-fd8a-fb0bfc0cce1f", group "cache"
+Evaluation status changed: "pending" -> "complete"
 ==> Evaluation "6776c250-1a86-a6bf-050b-53d36dde4817" finished with status "complete"
 vagrant@ddd-01:~$ docker ps
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                       NAMES
-369d722e48f2        redis:latest        "/entrypoint.sh redis"   2 minutes ago       Up 2 minutes        10.0.2.15:37912->6379/tcp   reverent_bose
+CONTAINER ID   IMAGE           COMMAND                  CREATED         STATUS          PORTS                       
+369d722e48f2   redis:latest    "/entrypoint.sh redis"   2 minutes ago   Up 2 minutes    10.0.2.15:37912->6379/tcp
 ```
 
 !SUB
@@ -245,16 +243,13 @@ vagrant@ddd-01:~$ sudo service nomad status
    CGroup: /system.slice/nomad.service
            └─2045 /usr/bin/nomad agent -config=/etc/nomad.d
 
-Nov 05 12:33:31 ddd-01 nomad[2045]: raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
-Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
-Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-Nov 05 12:33:31 ddd-01 nomad[2045]: serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
-Nov 05 12:33:31 ddd-01 nomad[2045]: nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
-Nov 05 12:33:31 ddd-01 nomad[2045]: serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-Nov 05 12:33:31 ddd-01 nomad[2045]: 2015/11/05 12:33:31 [INFO] serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-Nov 05 12:33:32 ddd-01 nomad[2045]: raft: EnableSingleNode disabled, and no known peers. Aborting election.
-Nov 05 12:33:32 ddd-01 nomad[2045]: 2015/11/05 12:33:32 [WARN] raft: EnableSingleNode disabled, and no known peers. Aborting election.
+raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
+[INFO] raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
+[INFO] serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+[INFO] nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
+nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
+serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
 ```
 
 !SLIDE
@@ -277,9 +272,8 @@ Docker can use several task drivers:
 * Try to place your job based on attribute
 
 !SUB
-# Job config via options
-## ENV setting for docker container, e.g. output message of paas-monitor
-## port mappings
+# Job config
+* Configure the job with environment variables
 
 !SUB
 # Updating jobs
@@ -295,13 +289,15 @@ Docker can use several task drivers:
 
 !SLIDE
 # Failures
-* What happens if we kill job?
-* What happens if we kill a Nomad client?
-* What happens if we kill a Nomad server?
-* What happens if we kill a VM?
+What happens if...
+* We kill job?
+* We kill a Nomad client?
+* We kill a Nomad server?
+* We kill a VM?
 * We restart after all Nomad servers went down?
 * We exhaust the resources on a node?
-Are resource limits hard? How are they enforced? Via Docker resource limits? Via cgroups in 'exec' driver?
+
+*Are resource limits hard? How are they enforced? Via Docker resource limits? Via cgroups in 'exec' driver?*
 
 !SLIDE
 # What will the future bring?
