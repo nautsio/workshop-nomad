@@ -1,55 +1,65 @@
 # What is Nomad
-* Nomad is a resource manager
-* Scheduler for multiple workloads
-  - Docker
-  - exec process
-  - Java
-  - Qemu VM
-* Single binary
-* Multi-Datacenter
-* Very new. version 0.1.3
-XXX
+Nomad manages a cluster of machines and the running of applications on them.
+It abstracts away the machines and location of the applications.
 
 !SUB
-# Architecture overview
-* terminology:
-  - job
-  - task, taskgroup
-  - allocation
-  - evalutation
-  - node
-  - agent
-  - server
-  - client
-  - task_driver
-XXX
+# Key features
+* Single binary for client & server
+* No external dependencies
+* Combines resource manager & scheduler
+* Multi-Datacenter & Multi-Region aware
+* Flexible workloads (Docker, Exec, Java, VM)
+* Multiple OSes (Windows, Linux, BSD, OSX)
+
+!SUB
+# Some caveats
+* Still in early development (version 0.1.2)
+* Doesn't restart your containers when they die
+* Implements a subset of docker features
+* Not all features are documented
+* Can't configure the agent with ENV variables
+* What resources are still available?
+* Where are my applications logging?
+
+!SLIDE
+# Architecture
+Some image of architecture?
+
+!SUB
+# Terminology
+* Job, Task & Taskgroup
+* Allocation & Evaluation
+* Node
+* Agent
+* Server
+* Client
+* Taskdriver
 
 !SLIDE
 # Workshop goal
-XXX
+Exploring Nomad's features, pros, cons and it's future possibilities.
 
 !SUB
 # Workshop Setup
 Prerequisites:
-* Virtualbox
-* Vagrant
-* Enough memory
-* This project repo
+* Virtualbox >= 5
+* Vagrant >= 1.6
+* Enough memory > 4gb
+* This project repository
 
 !SUB
 ## Environment
 The workshop environment consists of 3 VMs running Debian Jessie.
-They have Docker, Nomad, Consul and collectd preinstalled.
-Configuration still to be done by you.
+They have Docker v1.9, Nomad v0.1.2, Consul and Collectd preinstalled.
+Configuration will still have to be done by you.
 
 !SUB
-## collectd
-Collectd will gather metrics on the VMs, Nomad and Consul and send
-them to XXX.
-XXX how to find your IDs and lookup your metrics
+## Collectd
+Collectd will gather metrics on the VMs, Nomad and Consul, and send
+them to a central machine so we can compare performance of the various schedulers.
 
 !SLIDE
-## Starting
+## Lets get started
 To get started, fire up all VMs:
 
 ```
@@ -84,7 +94,7 @@ Bringing machine 'ddd-03' up with 'virtualbox' provider...
 
 !SUB
 # Logging in
-You can switch to root user without password (it is 'vagrant' btw)
+You can switch to root user without password.
 
 ```
 $ vagrant ssh ddd-01
@@ -130,11 +140,10 @@ Available commands are:
 
 !SUB
 # Agent Dev Mode
+In dev mode a single node is started that acts as both client and server.
+This should not be used in production, we will do a proper setup afterwards.
 
-* starts a single node in dev mode.
-* acts both as client and server
-* NOT for production we will perform a proper server installation later
-
+!SUB
 ```
 vagrant@ddd-01:~$ sudo nomad agent -dev
 ==> Starting Nomad agent...
@@ -154,24 +163,12 @@ vagrant@ddd-01:~$ sudo nomad agent -dev
     2015/11/05 11:12:20 [INFO] client: using alloc directory /tmp/NomadClient785630726
     2015/11/05 11:12:20 [INFO] raft: Node at 127.0.0.1:4647 [Follower] entering Follower state
     2015/11/05 11:12:20 [INFO] nomad: adding server ddd-01.global (Addr: 127.0.0.1:4647) (DC: dc1)
-    2015/11/05 11:12:22 [WARN] raft: Heartbeat timeout reached, starting election
-    2015/11/05 11:12:22 [INFO] raft: Node at 127.0.0.1:4647 [Candidate] entering Candidate state
-    2015/11/05 11:12:22 [DEBUG] raft: Votes needed: 1
-    2015/11/05 11:12:22 [DEBUG] raft: Vote granted. Tally: 1
-    2015/11/05 11:12:22 [INFO] raft: Election won. Tally: 1
-    2015/11/05 11:12:22 [INFO] raft: Node at 127.0.0.1:4647 [Leader] entering Leader state
     2015/11/05 11:12:22 [INFO] raft: Disabling EnableSingleNode (bootstrap)
     2015/11/05 11:12:22 [DEBUG] raft: Node 127.0.0.1:4647 updated peer set (2): [127.0.0.1:4647]
     2015/11/05 11:12:22 [INFO] nomad: cluster leadership acquired
-    2015/11/05 11:12:22 [DEBUG] client: applied fingerprints [arch cpu host memory storage network]
-    2015/11/05 11:12:22 [DEBUG] client: available drivers [docker exec java]
-    2015/11/05 11:12:22 [DEBUG] client: node registration complete
-    2015/11/05 11:12:22 [DEBUG] client: updated allocations at index 1 (0 allocs)
-    2015/11/05 11:12:22 [DEBUG] client: allocs: (added 0) (removed 0) (updated 0) (ignore 0)
-    2015/11/05 11:12:22 [DEBUG] client: state updated to ready
 ```
 
-
+!SUB
 ```
 nomad agent-info
 nomad status
@@ -275,3 +272,5 @@ Nov 05 12:33:32 ddd-01 nomad[2045]: 2015/11/05 12:33:32 [WARN] raft: EnableSingl
 # Resource exhaustion
 ## How detected, resolved...
 ## Are resource limits hard? How enforced? Via Docker resource limits? Via cgroups in 'exec' driver?
+
+test
