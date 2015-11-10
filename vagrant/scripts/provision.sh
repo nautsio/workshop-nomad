@@ -15,7 +15,7 @@ function generateNodeHostsLine() {
   echo "$IP   $HOST"
 }
 
-function writeConsulNodeCOnfig() {
+function writeConsulNodeConfig() {
   local BINDADDR="172.17.8.$((100+$MACHINE_ID))"
   if [ $MACHINE_ID == 1 ]; then
     printf '{"bootstrap": true, "bind_addr": "%s", "client_addr": "%s"}' $BINDADDR $BINDADDR | jq . > /etc/consul.d/node.json
@@ -35,6 +35,6 @@ function writeHostsFile() {
 
 writeHostsFile
 writeNomadNodeConfig
-writeConsulNodeCOnfig
+writeConsulNodeConfig
 
 sudo service consul restart
