@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
       config.vm.network :private_network, ip: ip
 
       # Provision machine.
-      config.vm.provision "shell", path: "scripts/provision.sh", :args => "%s %d %d" % [$instance_name_prefix, i, $num_instances]
+      config.vm.provision "shell", path: "scripts/provision.sh", :args => "%s %d %d 172.17.8.100" % [$instance_name_prefix, i, $num_instances]
     end
   end
 end
