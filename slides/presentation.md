@@ -232,25 +232,45 @@ sudo killall redis-server
 !SLIDE
 # Running in Cluster
 For a reliable cluster we need 3 servers (or 5). The Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`.
+Particularly note 'node.hcl', which is generated per node:
+
+```
+name="ddd-01"
+bind_addr="172.17.8.101"
+```
+
+Nomad needs to bind to the local network rather than loopback or else the ndes cannot see eachother.
+
+Use `export NOMAD_ADDR=http://ddd-01:4646` to let the nomad CLI connect to the right address.
 
 ```
 vagrant@ddd-01:~$ sudo service nomad start
 vagrant@ddd-01:~$ sudo service nomad status
 ● nomad.service - Nomad Agent
    Loaded: loaded (/etc/systemd/system/nomad.service; disabled)
-   Active: active (running) since Thu 2015-11-05 12:33:31 UTC; 3s ago
- Main PID: 2045 (nomad)
+   Active: active (running) since Wed 2015-11-11 02:13:49 UTC; 3s ago
+ Main PID: 2745 (nomad)
    CGroup: /system.slice/nomad.service
-           └─2045 /usr/bin/nomad agent -config=/etc/nomad.d
+           └─2745 /usr/bin/nomad agent -config=/etc/nomad.d
 
+Server: true
+==> Nomad agent started! Log data will stream in below:
+2015/11/11 02:13:49 [INFO] serf: EventMemberJoin: ddd-01.global 172.17.8.101
+2015/11/11 02:13:49 [INFO] nomad: starting 1 scheduling worker(s) for [service batch]
+2015/11/11 02:13:49 [INFO] raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
 raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
-[INFO] raft: Node at 172.17.8.101:4647 [Follower] entering Follower state
-[INFO] serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-serf: Attempting re-join to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
-[INFO] nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
+2015/11/11 02:13:49 [INFO] nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
 nomad: adding server ddd-01.global (Addr: 172.17.8.101:4647) (DC: dc1)
-serf: Re-joined to previously known node: ddd-01.amsterdam: 172.17.8.101:4648
+raft: EnableSingleNode disabled, and no known peers. Aborting election.
+2015/11/11 02:13:50 [WARN] raft: EnableSingleNode disabled, and no known peers. Aborting election.
 ```
+
+# Creating the cluster
+
+* Login to all ddd-01, ddd-02 and ddd-03 and start nomad services.
+* Check the cluster state. (Spoiler: you will )
+
+
 
 !SLIDE
 # Job creation
