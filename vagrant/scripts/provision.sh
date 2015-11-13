@@ -25,7 +25,7 @@ function writeConsulNodeConfig {
     else
       printf '{"start_join": ["%s"], "bind_addr": "%s", "client_addr": "%s"}' $(nodeNumberToAddress 1) $BIND_ADDR $BIND_ADDR
     fi
-  ) | jq . > /tmp/etc/consul.d/node.json
+  ) | jq . > /etc/consul.d/node.json
 }
 
 function writeHostsFile {
