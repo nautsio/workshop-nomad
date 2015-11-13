@@ -15,15 +15,8 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
 
   # Set up the box.
-  config.vm.box = "dutchdockerday"
-  config.vm.box_url = "../packer/images/dutchdockerday.box"
+  config.vm.box = "cargonauts/ddd"
   config.vm.box_check_update = false
-
-  # Disable VBox features.
-  config.vm.provider :virtualbox do |vb|
-    vb.check_guest_additions = false
-    vb.functional_vboxsf = false
-  end
 
   (1..$num_instances).each do |i|
     config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
