@@ -1,3 +1,14 @@
+# About this workshop
+This workshop aims to provide a playground to learn Nomad's
+features, pros and cons.
+
+It assumes basic knowledge of Docker and Linux.
+
+It is not a copy & paste walk through: it expects you to consult Nomad's documentation.
+
+Questions are welcome!
+
+!SLIDE
 # What is Nomad
 Nomad manages a cluster of machines and the running of applications on them.
 It abstracts away the machines and location of the applications.
@@ -14,9 +25,9 @@ It abstracts away the machines and location of the applications.
 !SUB
 # Some caveats
 * Still in early development (version 0.1.2)
-* Doesn't restart your containers when they die
-* Implements a subset of docker features
-* Not all features are documented
+* Does not (yet) restart your containers when they die
+* Supports but a subset of docker features
+* Some features are undocumented (read the source!)
 * Can't configure the agent with ENV variables
 * What resources are still available?
 * Where are my applications logging?
@@ -27,7 +38,7 @@ Clients talk to local server, one server is leader
 ![client-server](images/nomad-architecture-region-a5b20915.png)
 https://nomadproject.io/docs/internals/architecture.html
 
-!SLIDE
+!SUB
 # Architecture
 ![data model](images/nomad-data-model-39de5cfc.png)
 https://nomadproject.io/docs/internals/scheduling.html
@@ -40,10 +51,6 @@ https://nomadproject.io/docs/internals/scheduling.html
 * Taskdriver
 
 !SLIDE
-# Workshop goal
-Exploring Nomad's features, pros, cons and it's future possibilities.
-
-!SUB
 # Workshop Setup
 Prerequisites:
 * Virtualbox >= 5
@@ -173,8 +180,8 @@ Server: true
 * What is the status of the Nomad agent?
 * Which server members are present?
 * Which clients are present?
-* which resources (CPU, memory, etc.) are available? ...
-* which other information is available?
+* what resources (CPU, memory, etc.) are available? ...
+* what other information is available?
 
 https://nomadproject.io/docs/agent/
 
@@ -231,17 +238,30 @@ sudo killall redis-server
 
 !SLIDE
 # Running in Cluster
-For a reliable cluster we need 3 servers (or 5). The Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`.
-Particularly note 'node.hcl', which is generated per node:
+For a reliable cluster we need 3 servers or 5. More is possible but will make reaching consensus slower.
+
+So let's start it on all our servers.
+
+The Nomad configuration for running as a server is already supplied in `/etc/nomad.d/`,
+as 'Hashicorp Configuration Language' files.
+
+HCL is an extension of JSON, see https://github.com/hashicorp/hcl/blob/master/README.md
+
+!SUB
+# Binding to the right address
+Particularly note 'node.hcl', which is generated per node by Vagrant:
 
 ```
 name="ddd-01"
 bind_addr="172.17.8.101"
 ```
 
-Nomad needs to bind to the local network rather than loopback or else the ndes cannot see eachother.
+Nomad needs to bind to the local network rather than loopback or else the nodes cannot see eachother.
 
 Use `export NOMAD_ADDR=http://ddd-01:4646` to let the nomad CLI connect to the right address.
+
+!SUB
+# Starting the agent as as service
 
 ```
 vagrant@ddd-01:~$ sudo service nomad start
@@ -265,10 +285,65 @@ raft: EnableSingleNode disabled, and no known peers. Aborting election.
 2015/11/11 02:13:50 [WARN] raft: EnableSingleNode disabled, and no known peers. Aborting election.
 ```
 
-# Creating the cluster
+!SUB
 
-* Login to all ddd-01, ddd-02 and ddd-03 and start nomad services.
-* Check the cluster state. (Spoiler: you will )
+# Creating the cluster
+* Login to all ddd-01, ddd-02 and ddd-03 and start Nomad services.
+* Check the cluster state. (Spoiler: no cluster yet)
+
+!SUB
+# Creating the cluster
+The Nomad services run but do not know eachother yet.
+
+They need to 'join'.
+
+Exercise:
+* let ddd-02 join ddd-01 and ddd-03 join ddd-02
+* check the cluster state
+* who is leader?
+
+!SUB
+# Results
+
+On node 1, join 2:
+
+```
+vagrant@ddd-01:~$ export NOMAD_ADDR=http://ddd-01:4646
+vagrant@ddd-01:~$ nomad server-members
+Name           Addr          Port  Status  Proto  Build  DC   Region
+ddd-01.global  172.17.8.101  4648  alive   2      0.1.2  dc1  global
+Joined 1 servers successfully
+vagrant@ddd-01:~$ nomad server-members
+Name           Addr          Port  Status  Proto  Build  DC   Region
+ddd-01.global  172.17.8.101  4648  alive   2      0.1.2  dc1  global
+ddd-02.global  172.17.8.102  4648  alive   2      0.1.2  dc1  global
+```
+
+!SUB
+# Results
+
+One node 3, join 2:
+
+```
+vagrant@ddd-03:~$ export NOMAD_ADDR=http://ddd-03:4646
+vagrant@ddd-03:~$ nomad server-join ddd-02
+Joined 1 servers successfully
+```
+
+See results:
+
+```
+vagrant@ddd-01:~$ nomad server-members
+Name           Addr          Port  Status  Proto  Build  DC   Region
+ddd-01.global  172.17.8.101  4648  alive   2      0.1.2  dc1  global
+ddd-02.global  172.17.8.102  4648  alive   2      0.1.2  dc1  global
+ddd-03.global  172.17.8.103  4648  alive   2      0.1.2  dc1  global
+
+vagrant@ddd-03:~$ curl $NOMAD_ADDR/v1/status/leader
+"172.17.8.102:4647"
+```
+
+
 
 
 
