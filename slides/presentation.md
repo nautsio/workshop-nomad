@@ -237,7 +237,7 @@ sudo killall redis-server
 ```
 
 !SLIDE
-# Running in Cluster
+# Running a Nomad Cluster
 For a reliable cluster we need 3 servers or 5. More is possible but will make reaching consensus slower.
 
 So let's start it on all our servers.
@@ -343,23 +343,61 @@ vagrant@ddd-03:~$ curl $NOMAD_ADDR/v1/status/leader
 "172.17.8.102:4647"
 ```
 
+!SUB
+# Running a job in the cluster
+
+Now try to run a job.
+
+What happens?
+
+Why?
+
+!SUB
+# Running a job in the cluster
+
+Probably you saw something like this:
+
+```
+vagrant@ddd-01:~$ nomad run example.nomad
+==> Monitoring evaluation "ccdd0603-68ef-5c6c-46f4-02dfe9c4ac2e"
+    Evaluation triggered by job "example"
+    Scheduling error for group "cache" (failed to find a node for placement)
+    Allocation "a8a01dcd-b849-379f-8fab-437c51319105" status "failed" (0/0 nodes filtered)
+      * No nodes were eligible for evaluation
+    Evaluation status changed: "pending" -> "complete"
+==> Evaluation "ccdd0603-68ef-5c6c-46f4-02dfe9c4ac2e" finished with status "complete"
+```
+
+**failed to find a node** : our cluster consists of servers, but has no clients yet.
 
 
+!SUB
+# Adding clients
 
+Have a look at `/etc/nomad.d/client.hcl.off'.
+
+Rename it and restart Nomad.
+
+`nomad node-status` should now list the clients. The rest endpoint will return even more information
+on the indivdual nodes.
 
 !SLIDE
 # Job creation
 Nomad supports several job types:
   * Service
   * Batch
-  * System(in a future release)
+  * System (in a future release)
+
+Current Nomad releases focus improving the experience for Service jobs.
+
+Batch and System are on the roadmap for 0.3 and up.
 
 !SUB
 # Task drivers
 Docker can use several task drivers:
-  * Docker
-  * exec / raw_exec
-  * java
+  * Docker - run a Docker container
+  * exec - execute a (downloaded) executable, in its own chroot and cgroup (on Linux)
+  * java - run a downloaded Java jar.
   * there are others ...
 
 !SLIDE
@@ -382,6 +420,21 @@ Docker can use several task drivers:
 * What happens if we add nodes?
 * When we drain a node. What happens with jobs?
 * What happens if we remove a node?
+
+!SUB
+# Node Management
+* Added nodes will show up in `nomad node-status`. New allocations may be scheduled on the new node.
+* To drain a node Nomad will fire up instances on remaining nodes and kill off the jobs
+ on the drained node.
+
+!SLIDE
+# Resource Management
+
+Nomad will only schedule jobs on a node if that will not exceed its resource capacity.
+
+
+
+Therefore Nomad task
 
 !SLIDE
 # Failures
