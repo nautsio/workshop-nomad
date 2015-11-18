@@ -11,6 +11,11 @@ https://nomadproject.io/docs/internals/scheduling.html
 !SUB
 # Terminology
 * Job, Task & Taskgroup
-* Allocation & Evaluation
+  A Job is a specification of tasks that Nomad should run.
+  It consists of Taskgroups, which themselves contain one ore more Tasks.
+* Allocation
+  An Allocation is a placement of a Task on a machine.
+* Evaluation
+  An Evaluation is a determination where a Job can be run.  
 * Node, Agent, Server & Client
-* Taskdriver
+* Task Driver
