@@ -129,15 +129,39 @@ vagrant@ddd-01:~$ nomad run example.nomad
 ==> Evaluation "ccdd0603-68ef-5c6c-46f4-02dfe9c4ac2e" finished with status "complete"
 ```
 
-**failed to find a node** : our cluster consists of servers, but has no clients yet.
-
+*`failed to find a node`* : our cluster consists of servers, but has no clients yet.
 
 !SUB
 # Adding clients
 
-Have a look at `/etc/nomad.d/client.hcl.off'.
+So we need to add one or more 'clients'. Note that Nomad uses the term 'node' and 'client' interchangeably.
+
+Typically your cluster has 3 or 5 dedicated Nomad servers and many Nomad clients. Here, we will let our
+VMs double as both client and server.
+
+At a minimum a the configuration needs to enable the client role and the list of servers.
+
+```
+client {
+  enabled = true
+  servers = ["ddd-01:4646", "ddd-02:4646", "ddd-03:4646"]
+}
+```
+
+!SUB
+# Adding clients
+
+To get you going we have provided the necessary configuration in `/etc/nomad.d/client.hcl.off`.
 
 Rename it and restart Nomad.
 
-`nomad node-status` should now list the clients. The rest endpoint will return even more information
-on the indivdual nodes.
+`nomad node-status` should now list the clients:
+
+```
+vagrant@ddd-01:~$ nomad node-status
+ID                                    DC   Name    Class   Drain  Status
+496ac358-b1ae-d287-dd97-8c8e0ff12e22  dc1  ddd-01  <none>  false  ready
+1c415080-0219-da83-c181-b38a9f4dc30d  dc1  ddd-02  <none>  false  ready
+```
+
+`nomad node-status <node-id>` also returns allocations, and the rest endpoint will return even more information.
