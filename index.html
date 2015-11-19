@@ -17,10 +17,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
         <link rel="stylesheet" href="{{ site.cdn }}/reveal.js/css/reveal.css">
-        <link rel="stylesheet" href="{{ site.cdn }}/css/workshop.css" id="theme">
+        <link rel="stylesheet" href="presentation.css" id="theme">
 
         <!-- For syntax highlighting -->
-        <link rel="stylesheet" href="{{ site.cdn }}/css/highlightjs-tomorrow.css">
+        <!-- <link rel="stylesheet" href="highlight.css"> -->
 
         <link rel="stylesheet" href="{{ site.cdn }}/css/ribbon.css" />
         <!--[if lt IE 9]>
@@ -128,7 +128,6 @@
                     { src: '{{ site.cdn }}/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
                     { src: '{{ site.cdn }}/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                     { src: '{{ site.cdn }}/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                    { src: '{{ site.cdn }}/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     { src: '{{ site.cdn }}/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
                     { src: '{{ site.cdn }}/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
                 ]

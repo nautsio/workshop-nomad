@@ -30,6 +30,5 @@ It abstracts away the machines and location of the applications.
 * Still in early development (version 0.2)
 * Supports but a subset of docker features
 * Some features are undocumented (read the source!)
-* Can't configure the agent with ENV variables
 * What resources are still available?
 * Where are my applications logging?

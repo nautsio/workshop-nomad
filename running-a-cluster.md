@@ -73,6 +73,7 @@ vagrant@ddd-01:~$ export NOMAD_ADDR=http://ddd-01:4646
 vagrant@ddd-01:~$ nomad server-members
 Name           Addr          Port  Status  Proto  Build  DC   Region
 ddd-01.global  172.17.8.101  4648  alive   2      0.1.2  dc1  global
+vagrant@ddd-01:~$ nomad server-join 172.17.8.102
 Joined 1 servers successfully
 vagrant@ddd-01:~$ nomad server-members
 Name           Addr          Port  Status  Proto  Build  DC   Region
@@ -129,7 +130,7 @@ vagrant@ddd-01:~$ nomad run example.nomad
 ==> Evaluation "ccdd0603-68ef-5c6c-46f4-02dfe9c4ac2e" finished with status "complete"
 ```
 
-*`failed to find a node`* : our cluster consists of servers, but has no clients yet.
+*`failed to find a node`* Our cluster consists of servers, but has no clients yet.
 
 !SUB
 # Adding clients

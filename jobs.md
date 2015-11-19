@@ -1,19 +1,19 @@
-# Job creation
+# Jobs
+This section will take a look at the different types of jobs that Nomad supports, specifying constraints for a job and modifying jobs at runtime.
+
+!SUB
+# Job types
 Nomad supports several job types:
-  * Service
-  * Batch
-  * System (in a future release)
-
-Current Nomad releases focus improving the experience for Service jobs.
-
-Batch and System are on the roadmap for 0.3 and up.
+  * **Service**: The service scheduler is designed for scheduling long lived services that should never go down.
+  * **Batch**: Batch jobs are much less sensitive to short term performance fluctuations and are short lived, finishing in a few minutes to a few days.
+  * **System**: The system scheduler is used to register jobs that should be run on all clients that meet the job's constraints.
 
 !SUB
 # Task drivers
-Docker can use several task drivers:
+Nomad can use several task drivers:
   * Docker - run a Docker container
-  * exec - execute a (downloaded) executable, in its own chroot and cgroup (on Linux)
-  * java - run a downloaded Java jar.
+  * exec/rawexec - execute a (downloaded) executable, in its own chroot and cgroup (on Linux)
+  * java - run a downloaded Java jar file
   * there are others ...
 
 !SLIDE

@@ -8,10 +8,5 @@ Prerequisites:
 !SUB
 ## Environment
 The workshop environment consists of 3 VMs running Debian Jessie.
-They have Docker v1.9, Nomad v0.1.2, Consul and Collectd preinstalled.
+They have Docker v1.9, Nomad v0.2 and Consul preinstalled.
 Configuration will still have to be done by you.
-
-!SUB
-## Collectd
-Collectd will gather metrics on the VMs, Nomad and Consul, and send
-them to a central machine so we can compare performance of the various schedulers.
