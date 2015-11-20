@@ -60,6 +60,7 @@ Lets see this new feature in action by adding service discovery to our client no
 
 **Exercises**
 * Add `"consul.address" = "<hostname>:8500"` to each of the client configurations.
+* Restart the Nomad services.
 * Add a service block to the job specification.
 
 https://nomadproject.io/docs/jobspec/servicediscovery.html
