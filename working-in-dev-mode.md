@@ -104,7 +104,7 @@ Server: true
 11:12:22 [INFO] nomad: cluster leadership acquired
 ```
 
-NB. The error messagee about Consul can be safely ignore.
+NB. The error message about Consul can be safely ignore.
 
 !SUB
 # Exercises
