@@ -2,6 +2,7 @@
 # Workshop Nomad
 
 <br>[nauts.io/workshop-nomad](http://nauts.io/workshop-nomad)
+<br>[github.com/nautsio/workshop-nomad](http://github.com/nautsio/workshop-nomad)
 
 Erik Veld - [eveld@xebia.com](mailto:eveld@xebia.com)   
 Bastiaan Bakker - [bbakker@xebia.com](bbakker@xebia.com)
