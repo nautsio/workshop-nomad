@@ -8,6 +8,15 @@ It is not a copy & paste walkthrough: it expects you to consult Nomad's document
 
 Questions are welcome!
 
+!SUB
+# Checkout the repository
+To start, checkout the github repository to get the Vagrantfile that will be used to start the vagrant machines.   
+
+It's also wise to download the vagrant box!
+
+http://github.com/nautsio/workshop-nomad   
+http://vagrant.nauts.io
+
 !SLIDE
 # What is Nomad
 Nomad is a distributed, scalable and highly available cluster manager and scheduler designed for both microservice and batch workloads.
