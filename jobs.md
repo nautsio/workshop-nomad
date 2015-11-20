@@ -55,11 +55,23 @@ Now lets try changing settings in the job file and see what happens when we resu
 
 !SUB
 # Service discovery
-Since v0.2 Nomad now integrates directly with Consul for its service discovery, which removes the dependency on the Registrator container.
+
+Since verson 0.2.0 Nomad now integrates directly with Consul for its service discovery, which removes the need for a separate Registrator container.
+
 Lets see this new feature in action by adding service discovery to our client nodes and job files.
 
+!SUB
+# Service discovery
+
 **Exercises**
-* Add `"consul.address" = "<hostname>:8500"` to each of the client configurations.
+* Add
+
+  ```
+  consul {
+    address = "<hostname>:8500"
+  }
+  ```
+  to the client section of the Nomad node configurations.
 * Restart the Nomad services.
 * Add a service block to the job specification.
 * Resubmit the job and check if it appears in consul:   
