@@ -62,6 +62,8 @@ Lets see this new feature in action by adding service discovery to our client no
 * Add `"consul.address" = "<hostname>:8500"` to each of the client configurations.
 * Restart the Nomad services.
 * Add a service block to the job specification.
+* Resubmit the job and check if it appears in consul:   
+`curl http://ddd-01:8500/v1/catalog/services | jq .`
 
 https://nomadproject.io/docs/jobspec/servicediscovery.html
 
