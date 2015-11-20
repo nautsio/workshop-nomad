@@ -64,14 +64,16 @@ Lets see this new feature in action by adding service discovery to our client no
 # Service discovery
 
 **Exercises**
-* Add
+* Set
 
   ```
-  consul {
-    address = "<hostname>:8500"
+  client {
+    options {
+      "consul.address" = "<hostname>:8500"
+    }
   }
   ```
-  to the client section of the Nomad node configurations.
+  in the Nomad node configurations. Note the awkward quoting of the option key.
 * Restart the Nomad services.
 * Add a service block to the job specification.
 * Resubmit the job and check if it appears in consul:   
