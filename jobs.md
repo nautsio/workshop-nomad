@@ -17,16 +17,58 @@ Nomad can use several task drivers:
   * there are others ...
 
 !SLIDE
-# Constraints
-* Try to place your job based on metadata
-* Try to place your job based on attribute
+# Job creation
+Lets start by creating a job of our own, in JSON format so we can send it to the HTTP API endpoint of Nomad.
+We have pre-pulled some images (take a look at `docker images`) now we need to create the job file for one of them.
+
+**Exercises**
+* Create a minimal job for the selected docker image.
+* Start the job by sending it to the Nomad `/v1/jobs` HTTP API endpoint.
+
+https://nomadproject.io/docs/jobspec/index.html
 
 !SUB
-# Job config
-* Configure the job with environment variables
+# Constraints
+By specifying constraints you can dictate a set of rules that Nomad will follow when placing your jobs. These constraints can be on resources, self applied metadata and other configured attributes.
+
+**Exercises**
+* Try to place the job based on a node's attribute (e.g. hostname)
+* Try to place the job based on a node's metadata (We will need to add some)
+
+!SUB
+# Restart policies
+Very few tasks are immune to failure and the addition of restart policies recognizes that and allows users to rely on Nomad to keep the task running through transient failures.
+
+**Exercises**
+* Add a restart policy to the job.
+* Kill one of the job instances by executing the   
+`docker kill <job>` command.
 
 !SUB
 # Updating jobs
+Now lets try changing settings in the job file and see what happens when we resubmit the job.
+
+**Questions**
 * What happens if we change the version?
 * What happens if we scale up/down?
-* What happens if we add a constraint?
+* What happens if we add a constraint that would disallow placement of the already placed job?
+
+!SUB
+# Service discovery
+Since v0.2 Nomad now integrates directly with Consul for its service discovery, which removes the dependency on the Registrator container.
+Lets see this new feature in action by adding service discovery to our client nodes and job files.
+
+**Exercises**
+* Add `"consul.address" = "<hostname>:8500"` to each of the client configurations.
+* Add a service block to the job specification.
+
+https://nomadproject.io/docs/jobspec/servicediscovery.html
+
+!SUB
+# System scheduler
+Another new feature is the System scheduler, which will make sure your application is running on every node that matches the specified constraints.
+
+**Exercises**
+* Change the job type to system. What does this do to the job placement? (If we still have the hostname constraint, not a lot will happen...)
+
+https://nomadproject.io/docs/jobspec/schedulers.html
