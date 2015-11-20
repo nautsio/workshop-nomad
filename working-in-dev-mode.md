@@ -80,6 +80,8 @@ In dev mode a single node is started that acts as both client and server.
 This should not be used in production, we will do a proper setup afterwards.
 
 !SUB
+# Agent Dev Mode
+
 ```
 vagrant@ddd-01:~$ sudo nomad agent -dev
 ==> Starting Nomad agent...
@@ -103,7 +105,7 @@ Server: true
 ```
 
 NB. The error messagee about Consul can be safely ignore.
- 
+
 !SUB
 # Exercises
 
